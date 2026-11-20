@@ -12,7 +12,8 @@ import {
   Layers,
   ExternalLink,
   ChevronRight,
-  TrendingUp
+  TrendingUp,
+  BookOpen
 } from 'lucide-react';
 import {
   BarChart,
@@ -25,6 +26,7 @@ import {
 } from 'recharts';
 import { useAssessment } from '../context/AssessmentContext';
 import { DisclaimerBanner } from '../components/DisclaimerBanner';
+import { ManualModal } from '../components/ManualModal';
 
 export const ProgressPage = () => {
   const {
@@ -39,6 +41,7 @@ export const ProgressPage = () => {
   } = useAssessment();
 
   const [activeTabSection, setActiveTabSection] = useState('overview'); // 'overview' | 'projects' | 'checklist'
+  const [selectedProject, setSelectedProject] = useState(null);
 
   if (!analysis) {
     return (
@@ -302,24 +305,35 @@ export const ProgressPage = () => {
                     )}
                   </div>
 
-                  {/* Project Status Selector */}
-                  <div className="pt-3 border-t border-charcoal-border/60 flex items-center justify-between gap-3 text-xs">
-                    <span className="font-semibold text-charcoal-heading">Current Status:</span>
-                    <select
-                      value={currentStatus}
-                      onChange={(e) => setProjectStatus(proj.id, e.target.value)}
-                      className={`px-3 py-1.5 rounded-xl border text-xs font-semibold focus:outline-none transition-colors cursor-pointer ${
-                        currentStatus === 'Completed'
-                          ? 'bg-olive-50 border-olive-300 text-olive-800'
-                          : currentStatus === 'In Progress'
-                          ? 'bg-amber-50 border-amber-300 text-amber-800'
-                          : 'bg-white border-charcoal-border text-charcoal-muted'
-                      }`}
+                  {/* Project Status Selector & Odin Manual Trigger */}
+                  <div className="pt-3 border-t border-charcoal-border/60 space-y-2">
+                    <div className="flex items-center justify-between gap-3 text-xs">
+                      <span className="font-semibold text-charcoal-heading">Current Status:</span>
+                      <select
+                        value={currentStatus}
+                        onChange={(e) => setProjectStatus(proj.id, e.target.value)}
+                        className={`px-3 py-1.5 rounded-xl border text-xs font-semibold focus:outline-none transition-colors cursor-pointer ${
+                          currentStatus === 'Completed'
+                            ? 'bg-olive-50 border-olive-300 text-olive-800'
+                            : currentStatus === 'In Progress'
+                            ? 'bg-amber-50 border-amber-300 text-amber-800'
+                            : 'bg-white border-charcoal-border text-charcoal-muted'
+                        }`}
+                      >
+                        <option value="Not Started">Not Started</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed ✓</option>
+                      </select>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setSelectedProject(proj)}
+                      className="w-full py-2 px-3 rounded-xl bg-surface-secondary hover:bg-brand-50 hover:text-brand-800 text-charcoal border border-charcoal-border text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-subtle"
                     >
-                      <option value="Not Started">Not Started</option>
-                      <option value="In Progress">In Progress</option>
-                      <option value="Completed">Completed ✓</option>
-                    </select>
+                      <BookOpen className="w-3.5 h-3.5 text-brand-600" />
+                      <span>View Step-by-Step Blueprint & Manual</span>
+                    </button>
                   </div>
                 </div>
               );
@@ -380,6 +394,19 @@ export const ProgressPage = () => {
           </div>
         </div>
       )}
+
+      {/* Project Blueprint Modal */}
+      <ManualModal
+        isOpen={Boolean(selectedProject)}
+        onClose={() => setSelectedProject(null)}
+        item={selectedProject}
+        type="project"
+        onToggleComplete={(id) => {
+          const current = projectStatuses[id] || 'Not Started';
+          setProjectStatus(id, current === 'Completed' ? 'Not Started' : 'Completed');
+        }}
+        isCompleted={(projectStatuses[selectedProject?.id] || 'Not Started') === 'Completed'}
+      />
 
       <DisclaimerBanner />
     </div>

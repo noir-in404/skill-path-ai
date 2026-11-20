@@ -11,15 +11,18 @@ import {
   ChevronDown,
   ChevronUp,
   Filter,
-  CheckSquare
+  CheckSquare,
+  FileText
 } from 'lucide-react';
 import { useAssessment } from '../context/AssessmentContext';
 import { DisclaimerBanner } from '../components/DisclaimerBanner';
+import { ManualModal } from '../components/ManualModal';
 
 export const RoadmapPage = () => {
   const { analysis, assessment, stats, toggleTask, completedTasks, setActiveTab } = useAssessment();
   const [filter, setFilter] = useState('All'); // 'All' | 'Incomplete' | 'Completed'
   const [expandedPhases, setExpandedPhases] = useState({});
+  const [selectedManualTask, setSelectedManualTask] = useState(null);
 
   if (!analysis || !Array.isArray(analysis.roadmap) || analysis.roadmap.length === 0) {
     return (
@@ -276,14 +279,24 @@ export const RoadmapPage = () => {
                                   )}
                                 </div>
 
-                                {task.completionCriteria && (
-                                  <div className="text-[11px] text-charcoal-muted flex items-start gap-1">
-                                    <CheckCircle2 className="w-3.5 h-3.5 text-olive-600 shrink-0 mt-0.5" />
-                                    <span>
-                                      <strong>Criteria:</strong> {task.completionCriteria}
-                                    </span>
-                                  </div>
-                                )}
+                                {/* Action: Open Odin-Style Step-by-Step Learning Manual */}
+                                <div className="pt-2 flex items-center justify-between gap-3">
+                                  <button
+                                    type="button"
+                                    onClick={() => setSelectedManualTask(task)}
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-secondary hover:bg-brand-50 hover:text-brand-700 text-charcoal border border-charcoal-border text-xs font-semibold transition-all shadow-subtle"
+                                  >
+                                    <BookOpen className="w-3.5 h-3.5 text-brand-600" />
+                                    <span>Open Learning Manual & Step-by-Step Guide</span>
+                                  </button>
+
+                                  {task.completionCriteria && (
+                                    <div className="text-[11px] text-charcoal-muted hidden sm:flex items-center gap-1 truncate max-w-xs">
+                                      <CheckCircle2 className="w-3.5 h-3.5 text-olive-600 shrink-0" />
+                                      <span className="truncate">Criteria: {task.completionCriteria}</span>
+                                    </div>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -297,6 +310,16 @@ export const RoadmapPage = () => {
           );
         })}
       </div>
+
+      {/* Odin-Style Detailed Manual Modal */}
+      <ManualModal
+        isOpen={Boolean(selectedManualTask)}
+        onClose={() => setSelectedManualTask(null)}
+        item={selectedManualTask}
+        type="task"
+        onToggleComplete={toggleTask}
+        isCompleted={completedTasks.includes(selectedManualTask?.id)}
+      />
 
       <DisclaimerBanner />
     </div>

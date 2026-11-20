@@ -344,6 +344,23 @@ export const getSampleAnalysis = (assessment) => {
             estimatedHours: 6,
             practicalTask: "Build a small CLI or browser script that fetches weather or user data with error recovery.",
             completionCriteria: "Handles 404, 500, network loss, and manual aborts gracefully without uncaught exceptions.",
+            stepByStepGuide: [
+              "Step 1: Set up a blank JavaScript module or Node sandbox. Avoid third-party fetch libraries.",
+              "Step 2: Initialize an AbortController instance: const controller = new AbortController().",
+              "Step 3: Attach a setTimeout to automatically call controller.abort() after 5000 milliseconds.",
+              "Step 4: Use try/catch with fetch(url, { signal: controller.signal }) and explicitly check if (!res.ok) throw new Error(res.statusText).",
+              "Step 5: Write an exponential backoff loop (1s, 2s, 4s delay) that retries transient 5xx server errors up to 3 times before returning a structured error."
+            ],
+            whatToDo: [
+              "Always clean up setTimeout with clearTimeout if the fetch resolves before timeout.",
+              "Distinguish between user-initiated AbortError and actual network connection drops.",
+              "Return standardized payload shapes like { data, error, loading }."
+            ],
+            whatNotToDo: [
+              "DO NOT use empty catch {} blocks that swallow failed network calls silently.",
+              "DO NOT retry client errors (like 401 Unauthorized or 404 Not Found) — only retry transient 5xx errors.",
+              "DO NOT install Axios or other heavy libraries before mastering native fetch."
+            ],
             completed: false
           },
           {
@@ -356,6 +373,23 @@ export const getSampleAnalysis = (assessment) => {
             estimatedHours: 4,
             practicalTask: "Group an e-commerce order list by customer and compute average order values in a single reduce pass.",
             completionCriteria: "Pure function returns correct aggregated data without side effects.",
+            stepByStepGuide: [
+              "Step 1: Create a mock array of 20 orders containing customerId, itemCategory, and amount.",
+              "Step 2: Write a pure function groupByCustomer that uses Array.prototype.reduce().",
+              "Step 3: Inside the accumulator, compute running counts and total spend per customer without mutating the original order objects.",
+              "Step 4: Chain a secondary .map() transformation to output formatted summaries with rounded currency figures.",
+              "Step 5: Test edge cases: empty arrays, single-item arrays, and orders with 0 amounts."
+            ],
+            whatToDo: [
+              "Always supply an initial accumulator value (e.g. {}) to .reduce() to prevent runtime type errors.",
+              "Use Object.freeze() during unit testing to guarantee your functions do not mutate input data.",
+              "Prefer clean destructuring inside callback parameters: ({ customerId, amount }) => ..."
+            ],
+            whatNotToDo: [
+              "DO NOT use forEach with external variables when map or reduce produces a pure return value.",
+              "DO NOT mutate properties on nested objects directly (e.g. order.processed = true).",
+              "DO NOT write 50-line monolithic reduce callbacks — split helper logic into named functions."
+            ],
             completed: false
           }
         ]
@@ -381,6 +415,23 @@ export const getSampleAnalysis = (assessment) => {
             estimatedHours: 8,
             practicalTask: "Build a hook that syncs form input with localStorage and cleans up on unmount.",
             completionCriteria: "Hook provides { data, loading, error, refetch } and works across component remounts.",
+            stepByStepGuide: [
+              "Step 1: Create a src/hooks/useLocalStorage.js file taking (key, initialValue) parameters.",
+              "Step 2: Use lazy state initialization: useState(() => { return JSON.parse(localStorage.getItem(key)) ?? initialValue; }).",
+              "Step 3: Wrap localStorage.setItem in a useEffect with try/catch to safely handle browser storage quota exceptions.",
+              "Step 4: Next, build useFetch(url, options) returning { data, loading, error, refetch } with AbortController cleanup in the useEffect return function.",
+              "Step 5: Test remounting scenarios in React StrictMode to verify requests are aborted properly without memory leak warnings."
+            ],
+            whatToDo: [
+              "Always wrap localStorage operations in try/catch to prevent crashes in private browsing mode.",
+              "Include a cleanup function in useEffect to cancel active network subscriptions on unmount.",
+              "Memoize refetch with useCallback so consumers can safely put it in dependency arrays."
+            ],
+            whatNotToDo: [
+              "DO NOT call hooks conditionally inside if statements or loops (obey Rules of Hooks).",
+              "DO NOT store circular or non-serializable objects (functions, DOM nodes) in localStorage.",
+              "DO NOT trigger infinite re-renders by creating new object literals in hook return values without useMemo."
+            ],
             completed: false
           },
           {
@@ -393,6 +444,23 @@ export const getSampleAnalysis = (assessment) => {
             estimatedHours: 6,
             practicalTask: "Create a reusable Modal dialog with backdrop blur and smooth enter/leave transitions.",
             completionCriteria: "Full keyboard accessibility confirmed with Tab and Escape key testing.",
+            stepByStepGuide: [
+              "Step 1: Create a Modal component accepting isOpen, onClose, title, and children props.",
+              "Step 2: Render the modal into document.body using ReactDOM.createPortal to avoid z-index stacking issues.",
+              "Step 3: Add a window keydown event listener listening for Escape to trigger onClose(). Clean up the listener on unmount.",
+              "Step 4: Add aria-modal='true', role='dialog', and aria-labelledby attributes.",
+              "Step 5: Prevent background page scrolling when modal is open by adding overflow: hidden to document.body."
+            ],
+            whatToDo: [
+              "Use React portals so modals always render at the top level of the DOM tree.",
+              "Restore focus back to the triggering element when the modal is closed.",
+              "Provide a visible backdrop click target to close the modal intuitively."
+            ],
+            whatNotToDo: [
+              "DO NOT leave background page scrolling enabled while a modal is active.",
+              "DO NOT forget to remove window event listeners in useEffect cleanup functions.",
+              "DO NOT rely only on mouse clicks — test with keyboard only (Tab, Shift+Tab, Escape)."
+            ],
             completed: false
           }
         ]
@@ -449,6 +517,24 @@ export const getSampleAnalysis = (assessment) => {
           "Automated browser storage persistence and JSON export/import"
         ],
         careerRelevance: "Demonstrates practical ability to manage complex state trees and responsive user interactions that companies build every day.",
+        stepByStepGuide: [
+          "Phase 1: Architecture Planning - Define the board data model: columns array ('To Do', 'In Progress', 'Review', 'Done'), each holding tasks with { id, title, description, priority, tags, createdAt }.",
+          "Phase 2: Project Setup & Layout - Initialize Vite + React with Tailwind CSS. Create a 4-column responsive grid that scrolls horizontally on mobile devices.",
+          "Phase 3: Core Task CRUD - Implement TaskModal to add, edit, and delete tasks. Lift state to the top-level Board component to maintain a single source of truth.",
+          "Phase 4: Drag-and-Drop Implementation - Use native HTML5 Drag and Drop attributes (draggable, onDragStart, onDragOver, onDrop) to enable moving tasks between columns.",
+          "Phase 5: Persistence & Defensive UX - Persist board state to localStorage. Add debounced autosave, empty column placeholders, and a 'Reset Board' button.",
+          "Phase 6: Polish & Accessibility - Add keyboard navigation (Esc to close modal, Tab key trap) and responsive status tags."
+        ],
+        whatToDo: [
+          "Maintain immutable state updates: always use spread syntax or map/filter when reordering or updating tasks.",
+          "Generate collision-proof unique IDs with crypto.randomUUID() rather than using array indices.",
+          "Add visual hover indicators to drop zones so the user knows where their task will land."
+        ],
+        whatNotToDo: [
+          "DO NOT mutate state directly (e.g. board.columns[0].tasks.push(newTask)) — this will break React's render lifecycle.",
+          "DO NOT start implementing drag-and-drop before basic click-to-move or modal task editing works smoothly.",
+          "DO NOT hardcode column identifiers as raw strings across multiple components — declare a shared COLUMNS enum."
+        ],
         completed: false,
         status: "Not Started"
       },
@@ -465,6 +551,24 @@ export const getSampleAnalysis = (assessment) => {
           "Responsive mobile-first layout with dark/light visual theme"
         ],
         careerRelevance: "Demonstrates API integration proficiency, data visualization, and defensive coding against third-party network failure.",
+        stepByStepGuide: [
+          "Phase 1: Project Setup & API Interface - Set up React with Recharts and Tailwind CSS. Create an api/github.js module for user profile and repos fetching.",
+          "Phase 2: Search with Debounce - Implement an input field with a custom useDebounce hook (500ms delay) so requests only fire when the user finishes typing.",
+          "Phase 3: Rate-Limit & Error Handling - Inspect HTTP response headers (X-RateLimit-Remaining, X-RateLimit-Reset). Display an informative warning badge when limits are near.",
+          "Phase 4: Data Transformation - Calculate total repository stars, identify top 5 primary languages, and compute average repo size using pure utility functions.",
+          "Phase 5: Recharts Integration - Build an interactive BarChart for top starred repositories and a Donut/Pie chart for language percentage breakdown.",
+          "Phase 6: Empty & Loading States - Create pulsing skeleton loaders for charts while data fetches, and display an intuitive 'User Not Found' illustration for 404s."
+        ],
+        whatToDo: [
+          "Always handle the null case for repository language (e.g. markdown-only or config repos have no language).",
+          "Cache fetched profiles in sessionStorage so users navigating back do not re-consume GitHub API quota.",
+          "Use ResponsiveContainer from Recharts so charts fit seamlessly on mobile screens."
+        ],
+        whatNotToDo: [
+          "DO NOT store personal GitHub access tokens in public frontend client repositories.",
+          "DO NOT fire network calls on every single keystroke — debouncing is mandatory.",
+          "DO NOT assume repository lists are always under 30 items (account for GitHub pagination)."
+        ],
         completed: false,
         status: "Not Started"
       }

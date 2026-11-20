@@ -10,7 +10,9 @@ import {
   Code2,
   ChevronRight,
   TrendingUp,
-  AlertCircle
+  AlertCircle,
+  ClipboardList,
+  RotateCcw
 } from 'lucide-react';
 import {
   BarChart,
@@ -32,7 +34,8 @@ export const DashboardPage = () => {
     setActiveTab,
     toggleTask,
     loadDemoSample,
-    loading
+    loading,
+    resetAllData
   } = useAssessment();
 
   // If user has not completed an assessment yet, render clean empty state
@@ -125,6 +128,34 @@ export const DashboardPage = () => {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
+      {/* Demo Notice Banner if sample was loaded */}
+      {analysis?.isDemo && (
+        <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-amber-900 shadow-subtle animate-fade-in">
+          <div className="flex items-center gap-2.5">
+            <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
+            <span>
+              <strong>Sample Demo Loaded:</strong> You are currently looking at an example profile. You can take your own real assessment with Gemini anytime!
+            </span>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => resetAllData()}
+              className="px-3 py-1.5 rounded-lg bg-white border border-amber-300 font-semibold text-amber-900 hover:bg-amber-100 transition-colors flex items-center gap-1"
+            >
+              <RotateCcw className="w-3 h-3" />
+              <span>Clear Sample</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('assessment')}
+              className="px-3.5 py-1.5 rounded-lg bg-brand-600 font-semibold text-white hover:bg-brand-700 transition-colors flex items-center gap-1 shadow-subtle"
+            >
+              <ClipboardList className="w-3 h-3" />
+              <span>Take Your Assessment</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Welcome & Career Goal Banner */}
       <div className="p-6 rounded-2xl bg-white border border-charcoal-border shadow-card flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2">
@@ -142,12 +173,20 @@ export const DashboardPage = () => {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+        <div className="flex flex-col sm:flex-row items-center gap-2.5 shrink-0">
+          <button
+            onClick={() => setActiveTab('assessment')}
+            className="w-full sm:w-auto px-4 py-2.5 bg-white hover:bg-surface-secondary text-charcoal-heading border border-charcoal-border rounded-xl font-semibold text-xs sm:text-sm shadow-subtle flex items-center justify-center gap-1.5 transition-colors"
+          >
+            <ClipboardList className="w-4 h-4 text-brand-600" />
+            <span>Take Your Assessment</span>
+          </button>
+
           <button
             onClick={() => setActiveTab('roadmap')}
-            className="w-full sm:w-auto px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold text-sm shadow-subtle flex items-center justify-center gap-2 transition-colors"
+            className="w-full sm:w-auto px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold text-xs sm:text-sm shadow-subtle flex items-center justify-center gap-2 transition-colors"
           >
-            <span>Continue Learning</span>
+            <span>View Roadmap</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
