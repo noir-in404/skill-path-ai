@@ -1,0 +1,473 @@
+/**
+ * Sample / Demo Data Generator for SkillPath AI
+ * Used when running in Demo Mode or when GEMINI_API_KEY is not yet configured.
+ * Clearly marked as sample data to meet guidelines.
+ */
+
+export const getSampleAnalysis = (assessment) => {
+  const career = assessment.careerGoal || 'Frontend Developer';
+  const studyHours = assessment.dailyStudyHours || 2;
+  const weeks = assessment.learningDurationWeeks || 8;
+  const learningStyle = assessment.learningStyle || 'Practical projects';
+
+  // Customized sample based on career
+  if (career.toLowerCase().includes('data')) {
+    return {
+      isDemo: true,
+      careerGoal: career,
+      summary: `Sample Analysis: You have foundational curiosity in data manipulation. For a competitive ${career} role, you should bridge the gap between basic spreadsheet/scripting knowledge and industry-standard SQL query optimization, statistical testing, and reproducible analysis pipelines.`,
+      readinessScore: 42,
+      skillAnalysis: [
+        {
+          skill: "SQL & Relational Databases",
+          currentLevel: "Basic",
+          requiredLevel: "Advanced",
+          status: "Needs Improvement",
+          importance: "High",
+          category: "Core Technical",
+          reason: "Essential for querying analytical data warehouses, aggregations, window functions, and CTEs."
+        },
+        {
+          skill: "Python & Pandas",
+          currentLevel: "Intermediate",
+          requiredLevel: "Advanced",
+          status: "Needs Improvement",
+          importance: "High",
+          category: "Core Technical",
+          reason: "Primary toolkit for data wrangling, feature engineering, and automating repetitive ETL tasks."
+        },
+        {
+          skill: "Data Visualization (Tableau / PowerBI)",
+          currentLevel: "Beginner",
+          requiredLevel: "Intermediate",
+          status: "Needs Improvement",
+          importance: "High",
+          category: "Frameworks & Tools",
+          reason: "Stakeholders require intuitive visual dashboards and business intelligence reporting."
+        },
+        {
+          skill: "Statistical Analysis & Hypothesis Testing",
+          currentLevel: "None",
+          requiredLevel: "Intermediate",
+          status: "Missing",
+          importance: "High",
+          category: "Core Technical",
+          reason: "Required to validate A/B tests, measure significance, and avoid spurious data correlations."
+        },
+        {
+          skill: "Spreadsheets & Advanced Excel",
+          currentLevel: "Intermediate",
+          requiredLevel: "Intermediate",
+          status: "Strong",
+          importance: "Medium",
+          category: "Core Technical",
+          reason: "Quick ad-hoc financial models and exploratory analysis still rely heavily on Excel."
+        },
+        {
+          skill: "Git & Version Control",
+          currentLevel: "None",
+          requiredLevel: "Basic",
+          status: "Missing",
+          importance: "Medium",
+          category: "Architecture & Design",
+          reason: "Critical for collaborating on shared analytics repos and maintaining reproducible code."
+        }
+      ],
+      priorityGaps: [
+        {
+          skill: "Advanced SQL & Window Functions",
+          priority: "High",
+          reason: "Most data technical screenings start with complex multi-table joins and windowing.",
+          prerequisite: "Basic SQL queries"
+        },
+        {
+          skill: "Statistical Testing for Product Metrics",
+          priority: "High",
+          reason: "Distinguishes junior data extractors from analytical problem solvers.",
+          prerequisite: "Basic probability"
+        },
+        {
+          skill: "BI Dashboard Storytelling",
+          priority: "Medium",
+          reason: "Bridging the gap between raw data and executive decision-making.",
+          prerequisite: "Clean data models"
+        }
+      ],
+      roadmap: [
+        {
+          phase: 1,
+          title: "Phase 1: Advanced SQL & Data Modeling",
+          duration: "Weeks 1-2",
+          focus: "Mastering complex querying, subqueries, and relational schema modeling.",
+          objectives: [
+            "Write nested queries and Common Table Expressions (CTEs)",
+            "Master Window Functions (ROW_NUMBER, RANK, LAG/LEAD)",
+            "Optimize query performance with indexing"
+          ],
+          tasks: [
+            {
+              id: "t-1",
+              title: "Window Functions Deep Dive",
+              skill: "SQL",
+              description: "Learn how to compute running totals, moving averages, and ranks across partitions.",
+              importance: "High",
+              recommendedActivities: "Solve 15 LeetCode/HackerRank SQL medium challenges on window functions.",
+              estimatedHours: 8,
+              practicalTask: "Write a SQL query that ranks monthly customer cohort retention without self-joins.",
+              completionCriteria: "All 15 query solutions execute within optimal runtime limits.",
+              completed: false
+            },
+            {
+              id: "t-2",
+              title: "Relational Schema Normalization",
+              skill: "Database Design",
+              description: "Understand 1NF through 3NF and star schema modeling for analytics.",
+              importance: "High",
+              recommendedActivities: "Study star vs snowflake schemas in dimensional modeling.",
+              estimatedHours: 6,
+              practicalTask: "Design an e-commerce analytical schema with fact and dimension tables.",
+              completionCriteria: "Entity relationship diagram passes 3NF and analytical query efficiency checks.",
+              completed: false
+            }
+          ]
+        },
+        {
+          phase: 2,
+          title: "Phase 2: Exploratory Data Analysis & Python Pandas",
+          duration: "Weeks 3-5",
+          focus: "Data cleansing, missing value imputation, and automated EDA scripts.",
+          objectives: [
+            "Automate data ingestion from CSV, JSON, and SQL connections",
+            "Handle datetime transformations and time-series aggregation",
+            "Generate actionable visual summaries with Seaborn"
+          ],
+          tasks: [
+            {
+              id: "t-3",
+              title: "Data Cleaning Pipeline with Pandas",
+              skill: "Python & Pandas",
+              description: "Build robust scripts to sanitize messy real-world survey and transaction data.",
+              importance: "High",
+              recommendedActivities: "Download a messy Kaggle dataset and write a modular cleaning script.",
+              estimatedHours: 10,
+              practicalTask: "Write a Python script that flags outliers and normalizes address strings.",
+              completionCriteria: "Zero unhandled NaN errors when running on test batch files.",
+              completed: false
+            },
+            {
+              id: "t-4",
+              title: "Exploratory Data Analysis Report",
+              skill: "Data Visualization",
+              description: "Uncover distribution skewness, correlations, and anomalies using Seaborn/Matplotlib.",
+              importance: "Medium",
+              recommendedActivities: "Conduct an end-to-end EDA notebook with markdown documentation.",
+              estimatedHours: 8,
+              practicalTask: "Generate correlation heatmaps and boxplots for user churn factors.",
+              completionCriteria: "Deliver a Jupyter notebook with documented insights and business takeaways.",
+              completed: false
+            }
+          ]
+        },
+        {
+          phase: 3,
+          title: "Phase 3: Business Intelligence & Executive Storytelling",
+          duration: "Weeks 6-8",
+          focus: "Creating dynamic executive dashboards and presenting metric narratives.",
+          objectives: [
+            "Design user-friendly interactive BI dashboards",
+            "Calculate business KPIs (LTV, CAC, Churn rate)",
+            "Document findings for non-technical stakeholders"
+          ],
+          tasks: [
+            {
+              id: "t-5",
+              title: "Interactive KPI Dashboard",
+              skill: "Tableau / PowerBI",
+              description: "Build an executive-ready dashboard with dynamic date filters and drill-downs.",
+              importance: "High",
+              recommendedActivities: "Follow dashboard UX best practices for color harmony and clarity.",
+              estimatedHours: 12,
+              practicalTask: "Create a SaaS revenue and cohort churn tracker dashboard.",
+              completionCriteria: "Dashboard updates in under 2 seconds and includes clear metric definitions.",
+              completed: false
+            }
+          ]
+        }
+      ],
+      projects: [
+        {
+          id: "p-1",
+          title: "SaaS Retention & Churn Analytics Suite",
+          description: "Analyze customer subscription churn patterns using SQL queries and interactive Python notebooks, concluding with an executive retention dashboard.",
+          skills: ["SQL", "Python", "Pandas", "Tableau/PowerBI"],
+          difficulty: "Intermediate",
+          estimatedHours: 16,
+          deliverables: [
+            "Reproducible SQL ETL scripts with CTEs and window functions",
+            "Jupyter notebook detailing churn correlation and feature importance",
+            "Interactive dashboard tracking monthly recurring revenue (MRR) and cohort decay"
+          ],
+          careerRelevance: "Directly mirrors the daily analytics workflows at modern subscription and technology firms.",
+          completed: false,
+          status: "Not Started"
+        },
+        {
+          id: "p-2",
+          title: "E-Commerce Market Basket & Recommendation Analyzer",
+          description: "Apply association rule mining and SQL transactional aggregations to discover cross-sell opportunities for an online storefront.",
+          skills: ["Python", "Pandas", "Association Rules", "Data Storytelling"],
+          difficulty: "Advanced",
+          estimatedHours: 20,
+          deliverables: [
+            "Transaction database schema design",
+            "Python implementation of Apriori / FP-Growth algorithms",
+            "Executive slide deck highlighting top 5 cross-selling bundles"
+          ],
+          careerRelevance: "Demonstrates practical revenue-driving analytical capability beyond simple descriptive metrics.",
+          completed: false,
+          status: "Not Started"
+        }
+      ]
+    };
+  }
+
+  // Default: Frontend / Full Stack / Software Engineering
+  return {
+    isDemo: true,
+    careerGoal: career,
+    summary: `Sample Analysis: You show good foundational drive toward becoming a ${career}. To stand out in today's engineering job market, your primary focus should be bridging the gap from basic syntax to modern component architecture, state management patterns, API error handling, and end-to-end project execution.`,
+    readinessScore: 48,
+    skillAnalysis: [
+      {
+        skill: "JavaScript (ES6+) & Asynchronous Programming",
+        currentLevel: "Basic",
+        requiredLevel: "Advanced",
+        status: "Needs Improvement",
+        importance: "High",
+        category: "Core Technical",
+        reason: "Core foundation of web development. Required for promises, async/await, closures, and event-driven architecture."
+      },
+      {
+        skill: "React.js & Component Architecture",
+        currentLevel: "Beginner",
+        requiredLevel: "Intermediate",
+        status: "Needs Improvement",
+        importance: "High",
+        category: "Frameworks & Tools",
+        reason: "Industry standard library for building dynamic client-side applications with hooks and state isolation."
+      },
+      {
+        skill: "HTML5 Semantic Structure & Modern CSS",
+        currentLevel: "Intermediate",
+        requiredLevel: "Intermediate",
+        status: "Strong",
+        importance: "High",
+        category: "Core Technical",
+        reason: "Critical for accessibility (a11y), responsive layouts (Flexbox/Grid), and SEO indexing."
+      },
+      {
+        skill: "Git, Branching & GitHub Collaboration",
+        currentLevel: "Basic",
+        requiredLevel: "Intermediate",
+        status: "Needs Improvement",
+        importance: "Medium",
+        category: "Architecture & Design",
+        reason: "Essential for team workflows, pull request reviews, merge conflict resolution, and CI/CD."
+      },
+      {
+        skill: "REST API Integration & Error Resilience",
+        currentLevel: "None",
+        requiredLevel: "Intermediate",
+        status: "Missing",
+        importance: "High",
+        category: "Core Technical",
+        reason: "Real-world web apps must fetch, cache, and gracefully handle network failures and loading states."
+      },
+      {
+        skill: "TypeScript Fundamentals",
+        currentLevel: "None",
+        requiredLevel: "Basic",
+        status: "Missing",
+        importance: "Medium",
+        category: "Core Technical",
+        reason: "Most modern enterprise codebases enforce static typing to catch runtime bugs early."
+      },
+      {
+        skill: "Tailwind CSS & Design Systems",
+        currentLevel: "Basic",
+        requiredLevel: "Intermediate",
+        status: "Needs Improvement",
+        importance: "Medium",
+        category: "Frameworks & Tools",
+        reason: "Enables rapid UI development with consistent spacing, typography scales, and responsive variants."
+      }
+    ],
+    priorityGaps: [
+      {
+        skill: "Asynchronous JavaScript (Promises, async/await, event loop)",
+        priority: "High",
+        reason: "You cannot write reliable data-fetching React applications without deep async fluency.",
+        prerequisite: "JavaScript syntax & functions"
+      },
+      {
+        skill: "React State Management & Custom Hooks",
+        priority: "High",
+        reason: "Essential for building modular, maintainable user interfaces that update reactively.",
+        prerequisite: "ES6 modules and destructuring"
+      },
+      {
+        skill: "API Error Handling & Optimistic Updates",
+        priority: "Medium",
+        reason: "Distinguishes junior tutorial coders from production-ready developers.",
+        prerequisite: "Fetch / Axios API basics"
+      }
+    ],
+    roadmap: [
+      {
+        phase: 1,
+        title: "Phase 1: JavaScript Mastery & Asynchronous Foundations",
+        duration: "Weeks 1-2",
+        focus: "Solidifying core language mechanics, closures, and async data handling.",
+        objectives: [
+          "Understand the JavaScript Event Loop, Call Stack, and Microtask Queue",
+          "Master ES6+ syntax: destructuring, rest/spread, array methods (map, filter, reduce)",
+          "Handle asynchronous operations with Promises and async/await cleanly"
+        ],
+        tasks: [
+          {
+            id: "t-1",
+            title: "Async Data Fetcher with AbortController",
+            skill: "JavaScript",
+            description: "Build a reusable async utility function that handles network timeouts, cancelable requests, and status code errors.",
+            importance: "High",
+            recommendedActivities: "Implement retry logic with exponential backoff using vanilla JavaScript.",
+            estimatedHours: 6,
+            practicalTask: "Build a small CLI or browser script that fetches weather or user data with error recovery.",
+            completionCriteria: "Handles 404, 500, network loss, and manual aborts gracefully without uncaught exceptions.",
+            completed: false
+          },
+          {
+            id: "t-2",
+            title: "Functional Array Processing Exercises",
+            skill: "JavaScript",
+            description: "Practice transforming complex nested JSON payloads using map, filter, and reduce without mutating state.",
+            importance: "Medium",
+            recommendedActivities: "Solve 10 functional programming katas on exercism.org or LeetCode.",
+            estimatedHours: 4,
+            practicalTask: "Group an e-commerce order list by customer and compute average order values in a single reduce pass.",
+            completionCriteria: "Pure function returns correct aggregated data without side effects.",
+            completed: false
+          }
+        ]
+      },
+      {
+        phase: 2,
+        title: "Phase 2: React Core & Component State Architecture",
+        duration: "Weeks 3-5",
+        focus: "Building reactive, accessible components with modern React hooks.",
+        objectives: [
+          "Master useState, useEffect, useMemo, and useCallback rules",
+          "Create custom hooks for data fetching and browser state",
+          "Manage lift-state-up patterns and Context API for global state"
+        ],
+        tasks: [
+          {
+            id: "t-3",
+            title: "Custom Hook: useFetch & useLocalStorage",
+            skill: "React.js",
+            description: "Write custom hooks that encapsulate browser persistence and declarative API querying with cache.",
+            importance: "High",
+            recommendedActivities: "Review the official React docs on 'Reusing Logic with Custom Hooks'.",
+            estimatedHours: 8,
+            practicalTask: "Build a hook that syncs form input with localStorage and cleans up on unmount.",
+            completionCriteria: "Hook provides { data, loading, error, refetch } and works across component remounts.",
+            completed: false
+          },
+          {
+            id: "t-4",
+            title: "Accessible Modal & Dropdown UI Components",
+            skill: "React.js & Tailwind CSS",
+            description: "Construct interactive UI primitives with keyboard navigation (Esc to close, focus trap) and ARIA attributes.",
+            importance: "Medium",
+            recommendedActivities: "Study WAI-ARIA authoring practices for dialogs and disclosures.",
+            estimatedHours: 6,
+            practicalTask: "Create a reusable Modal dialog with backdrop blur and smooth enter/leave transitions.",
+            completionCriteria: "Full keyboard accessibility confirmed with Tab and Escape key testing.",
+            completed: false
+          }
+        ]
+      },
+      {
+        phase: 3,
+        title: "Phase 3: Production Polish, TypeScript & Full Project Delivery",
+        duration: "Weeks 6-8",
+        focus: "Typesafe props, routing, performance optimization, and project deployment.",
+        objectives: [
+          "Migrate React components to TypeScript with strict type definitions",
+          "Implement client-side routing with deep linkable URLs",
+          "Deploy to Vercel/Netlify with automated CI checks"
+        ],
+        tasks: [
+          {
+            id: "t-5",
+            title: "TypeScript Integration for React State",
+            skill: "TypeScript",
+            description: "Define discriminated union types for async states (Idle, Loading, Success, Error) and component props.",
+            importance: "High",
+            recommendedActivities: "Convert an existing JavaScript component tree to .tsx with strict null checks.",
+            estimatedHours: 10,
+            practicalTask: "Write TypeScript interfaces for a product catalogue with cart actions and dispatch types.",
+            completionCriteria: "Zero 'any' types used; compiler passes with no warnings.",
+            completed: false
+          },
+          {
+            id: "t-6",
+            title: "Performance Optimization & Lighthouse Audit",
+            skill: "Web Performance",
+            description: "Use React.lazy, dynamic imports, and image optimization to achieve a 95+ Lighthouse score.",
+            importance: "Medium",
+            recommendedActivities: "Profile render passes with React DevTools Profiler to eliminate unnecessary re-renders.",
+            estimatedHours: 6,
+            practicalTask: "Split vendor bundles and run an automated performance audit on production build.",
+            completionCriteria: "Achieve sub-1.5s Largest Contentful Paint (LCP) and zero layout shifts.",
+            completed: false
+          }
+        ]
+      }
+    ],
+    projects: [
+      {
+        id: "p-1",
+        title: "DevSprint – Agile Kanban & Task Management App",
+        description: "A responsive project management board featuring drag-and-drop task organization, priority filtering, localStorage persistence, and activity log.",
+        skills: ["React.js", "Tailwind CSS", "Custom Hooks", "State Management"],
+        difficulty: "Intermediate",
+        estimatedHours: 18,
+        deliverables: [
+          "Interactive drag-and-drop column board (To Do, In Progress, Review, Done)",
+          "Task tagging, priority indicators, and search filter",
+          "Automated browser storage persistence and JSON export/import"
+        ],
+        careerRelevance: "Demonstrates practical ability to manage complex state trees and responsive user interactions that companies build every day.",
+        completed: false,
+        status: "Not Started"
+      },
+      {
+        id: "p-2",
+        title: "CodePulse – GitHub Developer Profile & Repo Analyzer",
+        description: "An analytics web app that queries the GitHub REST API to visualize developer commit velocity, top languages, contribution heatmaps, and repository star metrics.",
+        skills: ["React.js", "REST API", "Recharts", "TypeScript"],
+        difficulty: "Intermediate",
+        estimatedHours: 22,
+        deliverables: [
+          "Debounced username search with graceful rate-limit handling and error banners",
+          "Visual data charts for repository sizes, languages, and commit frequencies",
+          "Responsive mobile-first layout with dark/light visual theme"
+        ],
+        careerRelevance: "Demonstrates API integration proficiency, data visualization, and defensive coding against third-party network failure.",
+        completed: false,
+        status: "Not Started"
+      }
+    ]
+  };
+};

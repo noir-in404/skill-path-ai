@@ -1,0 +1,21 @@
+{
+  "name": "skillpath-ai",
+  "version": "1.0.0",
+  "description": "SkillPath AI - From Career Ambition to Practical Skill Development",
+  "private": true,
+  "scripts": {
+    "server": "npm --prefix server start",
+    "server:dev": "npm --prefix server run dev",
+    "client": "npm --prefix client run dev",
+    "client:build": "npm --prefix client run build",
+    "install:all": "npm --prefix server install && npm --prefix client install"
+  },
+  "keywords": [
+    "career-readiness",
+    "gemini",
+    "skill-gap-analysis",
+    "learning-roadmap"
+  ],
+  "author": "SkillPath AI Team",
+  "license": "MIT"
+}
