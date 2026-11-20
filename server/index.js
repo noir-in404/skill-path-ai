@@ -29,16 +29,28 @@ app.use(express.json({ limit: '5mb' }));
 // Mount API routes
 app.use('/api', apiRoutes);
 
-// Base route
-app.get('/', (req, res) => {
-  res.json({
-    product: 'SkillPath AI API Server',
-    tagline: 'From Career Ambition to Practical Skill Development',
-    status: 'online',
-    endpoints: {
-      health: 'GET /api/health',
-      analyze: 'POST /api/assessment/analyze',
-      roadmap: 'POST /api/roadmap/generate'
+// Serve static client assets if client/dist exists (production mode)
+const clientDistPath = path.resolve(__dirname, '../client/dist');
+app.use(express.static(clientDistPath));
+
+// For SPA routing, serve index.html for non-API routes
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  const indexPath = path.join(clientDistPath, 'index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      res.json({
+        product: 'SkillPath AI API Server',
+        tagline: 'From Career Ambition to Practical Skill Development',
+        status: 'online',
+        endpoints: {
+          health: '/api/health',
+          analyze: '/api/assessment/analyze',
+          roadmap: '/api/roadmap/generate'
+        }
+      });
     }
   });
 });
