@@ -12,17 +12,19 @@ import {
   ChevronUp,
   Filter,
   CheckSquare,
-  FileText
+  ArrowRight
 } from 'lucide-react';
 import { useAssessment } from '../context/AssessmentContext';
 import { DisclaimerBanner } from '../components/DisclaimerBanner';
-import { ManualModal } from '../components/ManualModal';
+import { StudyGuideModal } from '../components/StudyGuideModal';
+import { ExerciseGuideModal } from '../components/ExerciseGuideModal';
 
 export const RoadmapPage = () => {
   const { analysis, assessment, stats, toggleTask, completedTasks, setActiveTab } = useAssessment();
   const [filter, setFilter] = useState('All'); // 'All' | 'Incomplete' | 'Completed'
   const [expandedPhases, setExpandedPhases] = useState({});
-  const [selectedManualTask, setSelectedManualTask] = useState(null);
+  const [selectedStudyTask, setSelectedStudyTask] = useState(null);
+  const [selectedExerciseTask, setSelectedExerciseTask] = useState(null);
 
   if (!analysis || !Array.isArray(analysis.roadmap) || analysis.roadmap.length === 0) {
     return (
@@ -256,47 +258,73 @@ export const RoadmapPage = () => {
                                   {task.description}
                                 </p>
 
-                                {/* Recommended activities & practical exercises */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-charcoal-border/50 text-[11px]">
+                                {/* Interactive Clickable Study and Exercise Cards */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2.5 border-t border-charcoal-border/50 text-[11px]">
+                                  {/* Clickable Recommended Study Card */}
                                   {task.recommendedActivities && (
-                                    <div className="p-2.5 rounded-lg bg-surface-secondary/70 border border-charcoal-border/40">
-                                      <div className="flex items-center gap-1 font-semibold text-charcoal-heading mb-0.5">
-                                        <BookOpen className="w-3 h-3 text-brand-600" />
-                                        <span>Recommended Study:</span>
+                                    <div
+                                      onClick={() => setSelectedStudyTask(task)}
+                                      className="p-3.5 rounded-xl bg-surface-secondary/70 hover:bg-brand-50/70 border border-charcoal-border/60 hover:border-brand-400 transition-all cursor-pointer group shadow-subtle flex flex-col justify-between"
+                                    >
+                                      <div className="space-y-1">
+                                        <div className="flex items-center justify-between gap-1">
+                                          <div className="flex items-center gap-1.5 font-bold text-xs text-charcoal-heading group-hover:text-brand-800">
+                                            <BookOpen className="w-3.5 h-3.5 text-brand-600" />
+                                            <span>Recommended Study</span>
+                                          </div>
+                                          <span className="text-[10px] font-semibold text-brand-600 flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
+                                            <span>Study Guide</span>
+                                            <ArrowRight className="w-3 h-3" />
+                                          </span>
+                                        </div>
+                                        <p className="text-charcoal-muted line-clamp-2 leading-relaxed">
+                                          {task.recommendedActivities}
+                                        </p>
                                       </div>
-                                      <p className="text-charcoal-muted">{task.recommendedActivities}</p>
+                                      <div className="mt-2 text-[10px] text-brand-700 font-semibold flex items-center gap-1">
+                                        <span>Click for learning sequence & source material</span>
+                                        <span>➔</span>
+                                      </div>
                                     </div>
                                   )}
 
+                                  {/* Clickable Practical Exercise Card */}
                                   {task.practicalTask && (
-                                    <div className="p-2.5 rounded-lg bg-surface-secondary/70 border border-charcoal-border/40">
-                                      <div className="flex items-center gap-1 font-semibold text-charcoal-heading mb-0.5">
-                                        <Code2 className="w-3 h-3 text-olive-600" />
-                                        <span>Practical Exercise:</span>
+                                    <div
+                                      onClick={() => setSelectedExerciseTask(task)}
+                                      className="p-3.5 rounded-xl bg-surface-secondary/70 hover:bg-olive-50/70 border border-charcoal-border/60 hover:border-olive-400 transition-all cursor-pointer group shadow-subtle flex flex-col justify-between"
+                                    >
+                                      <div className="space-y-1">
+                                        <div className="flex items-center justify-between gap-1">
+                                          <div className="flex items-center gap-1.5 font-bold text-xs text-charcoal-heading group-hover:text-olive-900">
+                                            <Code2 className="w-3.5 h-3.5 text-olive-600" />
+                                            <span>Practical Exercise</span>
+                                          </div>
+                                          <span className="text-[10px] font-semibold text-olive-700 flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
+                                            <span>Exercise Guide</span>
+                                            <ArrowRight className="w-3 h-3" />
+                                          </span>
+                                        </div>
+                                        <p className="text-charcoal-muted line-clamp-2 leading-relaxed">
+                                          {task.practicalTask}
+                                        </p>
                                       </div>
-                                      <p className="text-charcoal-muted">{task.practicalTask}</p>
+                                      <div className="mt-2 text-[10px] text-olive-700 font-semibold flex items-center gap-1">
+                                        <span>Click for detailed instructions & steps</span>
+                                        <span>➔</span>
+                                      </div>
                                     </div>
                                   )}
                                 </div>
 
-                                {/* Action: Open Odin-Style Step-by-Step Learning Manual */}
-                                <div className="pt-2 flex items-center justify-between gap-3">
-                                  <button
-                                    type="button"
-                                    onClick={() => setSelectedManualTask(task)}
-                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-secondary hover:bg-brand-50 hover:text-brand-700 text-charcoal border border-charcoal-border text-xs font-semibold transition-all shadow-subtle"
-                                  >
-                                    <BookOpen className="w-3.5 h-3.5 text-brand-600" />
-                                    <span>Open Learning Manual & Step-by-Step Guide</span>
-                                  </button>
-
-                                  {task.completionCriteria && (
-                                    <div className="text-[11px] text-charcoal-muted hidden sm:flex items-center gap-1 truncate max-w-xs">
-                                      <CheckCircle2 className="w-3.5 h-3.5 text-olive-600 shrink-0" />
-                                      <span className="truncate">Criteria: {task.completionCriteria}</span>
-                                    </div>
-                                  )}
-                                </div>
+                                {task.completionCriteria && (
+                                  <div className="text-[11px] text-charcoal-muted flex items-center gap-1 pt-1">
+                                    <CheckCircle2 className="w-3.5 h-3.5 text-olive-600 shrink-0" />
+                                    <span>
+                                      <strong>Criteria:</strong> {task.completionCriteria}
+                                    </span>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -311,14 +339,21 @@ export const RoadmapPage = () => {
         })}
       </div>
 
-      {/* Odin-Style Detailed Manual Modal */}
-      <ManualModal
-        isOpen={Boolean(selectedManualTask)}
-        onClose={() => setSelectedManualTask(null)}
-        item={selectedManualTask}
+      {/* Recommended Study Step-by-Step Sequence & Source Material Modal */}
+      <StudyGuideModal
+        isOpen={Boolean(selectedStudyTask)}
+        onClose={() => setSelectedStudyTask(null)}
+        task={selectedStudyTask}
+      />
+
+      {/* Practical Exercise Step-by-Step Instructions Modal */}
+      <ExerciseGuideModal
+        isOpen={Boolean(selectedExerciseTask)}
+        onClose={() => setSelectedExerciseTask(null)}
+        item={selectedExerciseTask}
         type="task"
         onToggleComplete={toggleTask}
-        isCompleted={completedTasks.includes(selectedManualTask?.id)}
+        isCompleted={completedTasks.includes(selectedExerciseTask?.id)}
       />
 
       <DisclaimerBanner />

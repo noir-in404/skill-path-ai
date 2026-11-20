@@ -40,40 +40,44 @@ export const SkillGapPage = () => {
 
   const skills = Array.isArray(analysis.skillAnalysis) ? analysis.skillAnalysis : [];
 
-  // Helper to map requiredLevel into target label & color style matching user reference design
-  const getTargetMeta = (requiredLevel, status) => {
+  // Target necessity level: Basic, Intermediate, Advanced
+  const getTargetMeta = (requiredLevel) => {
     const req = (requiredLevel || '').toLowerCase();
     
-    if (req.includes('advanced') || req.includes('expert') || status === 'Strong') {
+    if (req.includes('advanced') || req.includes('expert') || req.includes('strong')) {
       return {
-        label: 'Strong',
-        textColor: 'text-brand-600', // Terracotta / rust from reference
-      };
-    }
-    if (req.includes('intermediate') || req.includes('working')) {
-      return {
-        label: 'Working',
-        textColor: 'text-olive-700', // Olive green from reference
+        label: 'Advanced',
+        textColor: 'text-brand-600', // Terracotta / rust
       };
     }
     if (req.includes('basic') || req.includes('foundational') || req.includes('beginner')) {
       return {
-        label: 'Foundational',
-        textColor: 'text-amber-700', // Amber/ochre from reference
+        label: 'Basic',
+        textColor: 'text-amber-700', // Warm amber / ochre
       };
     }
     return {
-      label: requiredLevel || 'Working',
-      textColor: 'text-slateaccent-700',
+      label: 'Intermediate',
+      textColor: 'text-olive-700', // Olive green
     };
   };
 
-  // Helper for current level label
+  // Current baseline level: Not started, Basic, Intermediate, Advanced
   const formatCurrentLevel = (level) => {
-    if (!level || level.toLowerCase() === 'none') {
+    if (!level || level.toLowerCase() === 'none' || level.toLowerCase() === 'not started') {
       return 'Not started';
     }
-    return level;
+    const l = level.toLowerCase();
+    if (l.includes('beginner') || l.includes('basic')) {
+      return 'Basic';
+    }
+    if (l.includes('intermediate') || l.includes('working')) {
+      return 'Intermediate';
+    }
+    if (l.includes('advanced') || l.includes('expert') || l.includes('strong')) {
+      return 'Advanced';
+    }
+    return 'Basic';
   };
 
   const toggleRow = (idx) => {

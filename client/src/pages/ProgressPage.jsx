@@ -26,7 +26,7 @@ import {
 } from 'recharts';
 import { useAssessment } from '../context/AssessmentContext';
 import { DisclaimerBanner } from '../components/DisclaimerBanner';
-import { ManualModal } from '../components/ManualModal';
+import { ExerciseGuideModal } from '../components/ExerciseGuideModal';
 
 export const ProgressPage = () => {
   const {
@@ -395,8 +395,8 @@ export const ProgressPage = () => {
         </div>
       )}
 
-      {/* Project Blueprint Modal */}
-      <ManualModal
+      {/* Project Execution Guide Modal */}
+      <ExerciseGuideModal
         isOpen={Boolean(selectedProject)}
         onClose={() => setSelectedProject(null)}
         item={selectedProject}
