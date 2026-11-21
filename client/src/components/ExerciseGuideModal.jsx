@@ -20,6 +20,19 @@ export const ExerciseGuideModal = ({
   onToggleComplete,
   isCompleted
 }) => {
+  // Close modal on Escape key press (WCAG 2.1 AA)
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !item) return null;
 
   const isProject = type === 'project';
@@ -29,7 +42,12 @@ export const ExerciseGuideModal = ({
   const deliverables = item.deliverables || [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-charcoal/60 backdrop-blur-sm animate-fade-in overflow-y-auto">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="exercise-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-charcoal/60 backdrop-blur-sm animate-fade-in overflow-y-auto"
+    >
       <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] shadow-elevated border border-charcoal-border flex flex-col overflow-hidden my-auto">
         
         {/* Header */}
@@ -59,7 +77,7 @@ export const ExerciseGuideModal = ({
               </span>
             </div>
 
-            <h2 className="text-lg sm:text-xl font-extrabold text-charcoal-heading tracking-tight">
+            <h2 id="exercise-modal-title" className="text-lg sm:text-xl font-extrabold text-charcoal-heading tracking-tight">
               {item.title}
             </h2>
 
@@ -70,6 +88,7 @@ export const ExerciseGuideModal = ({
 
           <button
             onClick={onClose}
+            aria-label="Close exercise guide modal"
             className="p-2 rounded-xl text-charcoal-muted hover:text-charcoal hover:bg-black/5 transition-colors shrink-0"
           >
             <X className="w-5 h-5" />

@@ -301,10 +301,11 @@ export const AssessmentPage = () => {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-charcoal-heading mb-1.5">
+              <label htmlFor="student-name" className="block text-xs font-semibold text-charcoal-heading mb-1.5">
                 Your Name <span className="text-charcoal-muted font-normal">(optional)</span>
               </label>
               <input
+                id="student-name"
                 type="text"
                 placeholder="e.g. Alex Rivera"
                 value={formData.name}
@@ -314,10 +315,11 @@ export const AssessmentPage = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-charcoal-heading mb-1.5">
+              <label htmlFor="education-level" className="block text-xs font-semibold text-charcoal-heading mb-1.5">
                 Education Level <span className="text-brand-600">*</span>
               </label>
               <select
+                id="education-level"
                 value={formData.educationLevel}
                 onChange={(e) => setFormData({ ...formData, educationLevel: e.target.value })}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-charcoal-border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 bg-white"
@@ -331,10 +333,11 @@ export const AssessmentPage = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-charcoal-heading mb-1.5">
+              <label htmlFor="field-of-study" className="block text-xs font-semibold text-charcoal-heading mb-1.5">
                 Field of Study or Current Domain <span className="text-charcoal-muted font-normal">(optional)</span>
               </label>
               <input
+                id="field-of-study"
                 type="text"
                 placeholder="e.g. Computer Science, Graphic Design, Electrical Engineering, Self-learning"
                 value={formData.fieldOfStudy}
@@ -520,6 +523,7 @@ export const AssessmentPage = () => {
               <div className="sm:col-span-6">
                 <input
                   type="text"
+                  aria-label="Skill or competency name to add"
                   placeholder="e.g. Python, SQL, React, Figma, Docker"
                   value={newSkillName}
                   onChange={(e) => setNewSkillName(e.target.value)}
@@ -535,6 +539,7 @@ export const AssessmentPage = () => {
 
               <div className="sm:col-span-4">
                 <select
+                  aria-label="Skill proficiency level"
                   value={newSkillLevel}
                   onChange={(e) => setNewSkillLevel(e.target.value)}
                   className="w-full px-3 py-2 rounded-xl border border-charcoal-border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 bg-white"
@@ -550,6 +555,7 @@ export const AssessmentPage = () => {
               <div className="sm:col-span-2">
                 <button
                   type="button"
+                  aria-label="Add custom skill"
                   onClick={() => handleAddSkill(newSkillName, newSkillLevel)}
                   className="w-full py-2 bg-charcoal hover:bg-charcoal/90 text-white rounded-xl font-medium text-xs flex items-center justify-center gap-1 transition-colors"
                 >

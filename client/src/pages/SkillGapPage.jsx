@@ -112,17 +112,23 @@ export const SkillGapPage = () => {
       </div>
 
       {/* Main Clean Table Card (Matching User's Reference Design) */}
-      <div className="bg-white rounded-3xl border border-charcoal-border shadow-card overflow-hidden">
-        
+      <div
+        role="table"
+        aria-label="Skill Gap Benchmark Table"
+        className="bg-white rounded-3xl border border-charcoal-border shadow-card overflow-hidden"
+      >
         {/* Table Column Headers */}
-        <div className="grid grid-cols-12 px-6 sm:px-8 py-4 border-b border-charcoal-border/70 text-[11px] font-bold uppercase tracking-wider text-charcoal-muted">
-          <div className="col-span-6 sm:col-span-5">Skill</div>
-          <div className="col-span-3 sm:col-span-4">Current</div>
-          <div className="col-span-3 sm:col-span-3 text-right sm:text-left">Target</div>
+        <div
+          role="row"
+          className="grid grid-cols-12 px-6 sm:px-8 py-4 border-b border-charcoal-border/70 text-[11px] font-bold uppercase tracking-wider text-charcoal-muted"
+        >
+          <div role="columnheader" className="col-span-6 sm:col-span-5">Skill</div>
+          <div role="columnheader" className="col-span-3 sm:col-span-4">Current</div>
+          <div role="columnheader" className="col-span-3 sm:col-span-3 text-right sm:text-left">Target</div>
         </div>
 
         {/* Table Rows */}
-        <div className="divide-y divide-charcoal-border/60">
+        <div role="rowgroup" className="divide-y divide-charcoal-border/60">
           {skills.map((item, idx) => {
             const currentLabel = formatCurrentLevel(item.currentLevel);
             const targetMeta = getTargetMeta(item.requiredLevel, item.status);
@@ -131,14 +137,24 @@ export const SkillGapPage = () => {
             return (
               <div
                 key={idx}
-                className="transition-colors hover:bg-surface-secondary/40 cursor-pointer"
+                role="row"
+                tabIndex="0"
+                aria-expanded={isExpanded}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleRow(idx);
+                  }
+                }}
+                aria-label={`${item.skill}: Current level ${currentLabel}, Target level ${targetMeta.label}. Click or press Enter to ${isExpanded ? 'collapse' : 'expand'} rationale.`}
+                className="transition-colors hover:bg-surface-secondary/40 cursor-pointer focus:outline-none focus:bg-surface-secondary/60"
                 onClick={() => toggleRow(idx)}
               >
                 {/* Main Row */}
                 <div className="grid grid-cols-12 px-6 sm:px-8 py-4 sm:py-5 items-center">
                   
                   {/* Skill Name Column */}
-                  <div className="col-span-6 sm:col-span-5 pr-2">
+                  <div role="cell" className="col-span-6 sm:col-span-5 pr-2">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-sm sm:text-base text-charcoal-heading tracking-tight">
                         {item.skill}
@@ -147,20 +163,21 @@ export const SkillGapPage = () => {
                   </div>
 
                   {/* Current Level Column */}
-                  <div className="col-span-3 sm:col-span-4">
+                  <div role="cell" className="col-span-3 sm:col-span-4">
                     <span className="text-xs sm:text-sm font-medium text-charcoal-muted">
                       {currentLabel}
                     </span>
                   </div>
 
                   {/* Target Expectation Column */}
-                  <div className="col-span-3 sm:col-span-3 flex items-center justify-between">
+                  <div role="cell" className="col-span-3 sm:col-span-3 flex items-center justify-between">
                     <span className={`text-xs sm:text-sm font-bold tracking-tight ${targetMeta.textColor}`}>
                       {targetMeta.label}
                     </span>
                     <button
                       type="button"
-                      className="p-1 rounded text-charcoal-muted/60 hover:text-charcoal hidden sm:block"
+                      aria-label={isExpanded ? `Collapse details for ${item.skill}` : `Expand details for ${item.skill}`}
+                      className="p-1 rounded text-charcoal-muted/60 hover:text-charcoal hidden sm:block focus:outline-none"
                     >
                       {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </button>

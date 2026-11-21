@@ -5,6 +5,7 @@ import { Header } from './components/Header';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { Toast } from './components/Toast';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { SkipLink } from './components/SkipLink';
 
 import { DashboardPage } from './pages/DashboardPage';
 import { AssessmentPage } from './pages/AssessmentPage';
@@ -36,6 +37,9 @@ const AppContent = () => {
 
   return (
     <div className="min-h-screen flex bg-surface text-charcoal">
+      {/* Accessible Skip Link for Keyboard / Screen Reader Navigation */}
+      <SkipLink targetId="main-content" />
+
       {/* Left Sidebar */}
       <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
 
@@ -48,7 +52,11 @@ const AppContent = () => {
         />
 
         {/* Dynamic Page Container */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        <main
+          id="main-content"
+          tabIndex="-1"
+          className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto focus:outline-none"
+        >
           {renderActivePage()}
         </main>
       </div>

@@ -16,7 +16,28 @@ Students and fresh graduates often know what career they want, but struggle to a
 
 ---
 
-## 2. Technology Stack
+## 2. Problem Statement Alignment & Root Challenge Mapping
+
+### The Root Challenge
+Traditional educational curricula and online courses provide static, one-size-fits-all roadmaps. Aspiring developers and students face four crippling obstacles:
+1. **Industry Benchmark Ambiguity:** Job seekers do not know which specific technical proficiencies employers currently prioritize.
+2. **Uncalibrated Self-Assessment:** Candidates either suffer from imposter syndrome or false confidence due to lack of objective competency diagnostics.
+3. **Tutorial Hell & Sequence Confusion:** Learners jump between disparate tutorials without a structured sequence, clear DOs/DON'Ts, or authoritative documentation references.
+4. **Lack of Practical Portfolio Proof:** Resumes with generic copy-pasted tutorial code fail hiring manager screenings; candidates need production-grade portfolio capstones with verifiable deliverables.
+
+### How SkillPath AI Directly Solves the Challenge
+
+| Core Objective | User Need | SkillPath AI Solution | Verification |
+| :--- | :--- | :--- | :--- |
+| **Objective 1: Skill Gap Diagnostic** | Diagnose exact gaps between current abilities and industry benchmarks | Google Gemini API analyzes user's self-reported baseline against current industry standards across 4 calibrated tiers (`Basic`, `Intermediate`, `Advanced`, `Not started`). | `server/tests/assessment.test.js`, `client/tests/SkillGapPage.test.jsx` |
+| **Objective 2: Prioritized Remediation** | Understand what high-leverage fundamentals to master first | Gemini generates a dedicated **Priority Gaps Banner** highlighting critical prerequisites (e.g. Asynchronous JS before React Hooks). | `server/tests/geminiService.test.js` |
+| **Objective 3: Actionable Study Roadmap** | Eliminate confusion regarding what to learn, in what order, and from where | Interactive **Recommended Study Cards** open modal study roadmaps with a 4-step sequence, authoritative documentation links (MDN, React, PostgreSQL), DOs, and DON'Ts. | `client/tests/Modals.test.jsx`, `client/tests/RoadmapPage.test.jsx` |
+| **Objective 4: Hands-on Practical Projects** | Build verifiable resume-ready portfolio proof | Interactive **Practical Exercise Cards** deliver complete execution guides, step-by-step blueprints, acceptance criteria, and deliverable checklists. | `client/tests/Modals.test.jsx`, `server/tests/roadmap.test.js` |
+| **Objective 5: Time-Calibrated Progress** | Fit structured learning into real-world constraints (e.g. 1-2h/day) | Progress metrics dynamically compute milestone velocity, estimated study hours completed, and overall curriculum completion percentages. | `client/tests/DashboardPage.test.jsx`, `server/tests/validationMiddleware.test.js` |
+
+---
+
+## 3. Technology Stack
 
 - **Frontend:**
   - React.js (v18)
@@ -36,45 +57,42 @@ Students and fresh graduates often know what career they want, but struggle to a
 
 ---
 
-## 3. Project Structure
+## 4. Project Structure
 
 ```text
 skillpath-ai/
 ├── client/                     # React + Vite frontend
 │   ├── src/
-│   │   ├── components/         # Reusable UI components (Sidebar, Header, ApiKeyModal, Toast, etc.)
+│   │   ├── components/         # Reusable UI components (ErrorBoundary, SkipLink, Modals, Header, Sidebar, Toast)
 │   │   ├── context/            # React Context (AssessmentContext for state & persistence)
-│   │   ├── pages/              # 5 Core Application Pages:
-│   │   │   ├── DashboardPage.jsx
-│   │   │   ├── AssessmentPage.jsx
-│   │   │   ├── SkillGapPage.jsx
-│   │   │   ├── RoadmapPage.jsx
-│   │   │   └── ProgressPage.jsx
+│   │   ├── pages/              # 5 Core Application Pages (Dashboard, Assessment, SkillGap, Roadmap, Progress)
 │   │   ├── services/           # Frontend API client
 │   │   ├── utils/              # Career constants, options, styles
 │   │   ├── App.jsx             # Main application layout
 │   │   ├── main.jsx            # Entry point
 │   │   └── index.css           # Tailwind directives & typography
+│   ├── tests/                  # Frontend Vitest test suite (Modals, SkillGap, Roadmap, Dashboard, ErrorBoundary)
 │   ├── package.json
-│   ├── vite.config.js          # Vite config with backend /api proxy
+│   ├── vite.config.js          # Vite config with backend /api proxy & Vitest configuration
 │   └── tailwind.config.js      # Custom warm-palette theme
 ├── server/                     # Express & Gemini backend
 │   ├── controllers/            # Assessment & Roadmap controllers
+│   ├── middleware/             # Validation middleware & centralized error handling
 │   ├── routes/                 # Express API routes
 │   ├── services/
 │   │   ├── geminiService.js    # Official @google/genai integration
 │   │   └── sampleDataService.js# High-quality sample data for Hackathon Demo Mode
-│   ├── .env.example            # Backend env template
-│   ├── index.js                # Express server entry point
+│   ├── tests/                  # Backend Node.js test suite (health, assessment, roadmap, gemini, sampleData)
+│   ├── app.js                  # Modular Express app
+│   ├── index.js                # Server entry point
 │   └── package.json
-├── .env.example                # Root env template
-├── package.json                # Root scripts
+├── package.json                # Root scripts (unified npm test, build, dev)
 └── README.md                   # Documentation
 ```
 
 ---
 
-## 4. Quick Start & Running the Application
+## 5. Quick Start & Running the Application
 
 ### Prerequisites
 - Node.js v18+ (tested on Node v24)
@@ -118,7 +136,7 @@ Client starts on `http://localhost:5173`. Open your browser to `http://localhost
 
 ---
 
-## 5. Key Features Walkthrough
+## 6. Key Features Walkthrough
 
 ### 🧭 Feature A: Career Dashboard
 - Comprehensive overview displaying the user's active career goal, total readiness score, evaluated skills, and overall completion percentage.
@@ -135,7 +153,7 @@ Client starts on `http://localhost:5173`. Open your browser to `http://localhost
 ### 🔍 Feature C: AI-Powered Skill Gap Analysis
 - Gemini compares self-reported skills against live industry requirements for the selected career.
 - Identifies **Strong**, **Needs Improvement**, and **Missing** skills.
-- Renders dual progress bars comparing *Current Self-Reported Proficiency* vs *Target Industry Expectation*.
+- Renders clean table comparing *Current Self-Reported Proficiency* vs *Target Industry Expectation* across 4 clear tiers (`Basic`, `Intermediate`, `Advanced`, `Not started`).
 - Dedicated **Priority Gaps Banner** highlighting critical prerequisite competencies to learn first.
 - Filter tabs for fast triage across skill status and importance.
 
@@ -143,8 +161,8 @@ Client starts on `http://localhost:5173`. Open your browser to `http://localhost
 - Structured weekly phases with learning objectives and focus areas.
 - Every learning milestone includes:
   - Estimated study hours.
-  - Recommended study activities and official documentation.
-  - Practical coding/design hands-on exercise.
+  - Interactive **Recommended Study Card** that opens a 4-step sequence guide and authoritative source materials.
+  - Interactive **Practical Exercise Card** that delivers step-by-step instructions, DOs, and DON'Ts.
   - Clear completion criteria.
 - Real-time checkboxes that immediately update global progress and persist to `localStorage`.
 
@@ -160,7 +178,7 @@ Client starts on `http://localhost:5173`. Open your browser to `http://localhost
 
 ---
 
-## 6. Comprehensive Testing & Quality Assurance Suite
+## 7. Comprehensive Testing & Quality Assurance Suite
 
 SkillPath AI incorporates an end-to-end automated test suite spanning backend API endpoints, AI schema validation, fallback demo generation, React component lifecycles, and UI interaction flows.
 
@@ -169,10 +187,11 @@ SkillPath AI incorporates an end-to-end automated test suite spanning backend AP
 | Layer | Framework / Runner | Scope | Test Files | Tests |
 | :--- | :--- | :--- | :--- | :--- |
 | **Backend API & Endpoints** | Node.js Native Test Runner (`node:test`, `supertest`) | Health checks, API routing, HTTP 400 validation, error responses | `server/tests/health.test.js`, `server/tests/assessment.test.js`, `server/tests/roadmap.test.js` | 8 tests |
+| **Backend Validation Middleware** | Node.js Native Test Runner (`node:test`, `supertest`) | Strict study hours and duration bounds, sanitized payloads | `server/tests/validationMiddleware.test.js` | 3 tests |
 | **Backend AI & Schema** | Node.js Native Test Runner (`node:test`) | Model configuration, JSON sanitization, missing ID repair, fallback logic | `server/tests/geminiService.test.js`, `server/tests/sampleData.test.js` | 7 tests |
-| **Frontend UI Components** | Vitest + React Testing Library + JSDOM | Modal dialogues, interactive step-by-step guides, table benchmarking | `client/tests/Modals.test.jsx`, `client/tests/SkillGapPage.test.jsx`, `client/tests/RoadmapPage.test.jsx` | 15 tests |
-| **Frontend State & Resilience** | Vitest + React Testing Library | Error boundaries, career tracks, metrics aggregation, empty states | `client/tests/ErrorBoundary.test.jsx`, `client/tests/DashboardPage.test.jsx`, `client/tests/constants.test.js` | 9 tests |
-| **Total Automated Coverage** | **Vitest + Node.js Native** | **Full Stack End-to-End** | **11 Test Suites** | **37+ Automated Tests (100% Pass Rate)** |
+| **Frontend UI Components** | Vitest + React Testing Library + JSDOM | Modal dialogues, sequential learning guides, DOs & DON'Ts, table benchmarking | `client/tests/Modals.test.jsx`, `client/tests/SkillGapPage.test.jsx`, `client/tests/RoadmapPage.test.jsx` | 15 tests |
+| **Frontend State & Resilience** | Vitest + React Testing Library | Error boundaries, skip links, career tracks, metrics aggregation, empty states | `client/tests/ErrorBoundary.test.jsx`, `client/tests/SkipLink.test.jsx`, `client/tests/DashboardPage.test.jsx`, `client/tests/constants.test.js` | 11 tests |
+| **Total Automated Coverage** | **Vitest + Node.js Native** | **Full Stack End-to-End** | **13 Test Suites** | **44+ Automated Tests (100% Pass Rate)** |
 
 ### Running the Test Suites
 
@@ -180,7 +199,7 @@ SkillPath AI incorporates an end-to-end automated test suite spanning backend AP
 ```bash
 npm test
 ```
-*Executes both server and client test suites sequentially, validating 37+ tests.*
+*Executes both server and client test suites sequentially, validating 44+ tests.*
 
 #### 2. Run Backend API & AI Tests Only
 ```bash
@@ -199,18 +218,30 @@ npm run test:coverage
 
 ### Code Quality & Engineering Best Practices
 - **Resilience via Error Boundaries:** Protected by `ErrorBoundary.jsx` preventing white-screen crashes and preserving user session data during runtime rendering exceptions.
+- **Centralized Middleware Pipeline:** Input validation (`validationMiddleware.js`) and error handling (`errorHandler.js`) isolated from controllers.
 - **Defensive Parsing:** All Gemini API outputs pass through `geminiService.validateAndSanitize()`, ensuring non-crashing fallbacks for missing keys, step guides, and deliverables.
 - **Input Validation:** Strict endpoint validation rejects empty or malformed requests with standard HTTP 400 bad request envelopes.
-- **Accessibility (a11y):** High-contrast typography, semantic HTML (`<main>`, `<header>`, `<aside>`, `<table>`), ARIA tags (`aria-label`, `aria-modal="true"`, `role="dialog"`), and full keyboard navigation (Escape, Tab focus traps).
 
 ---
 
-## 7. Responsible AI & Advisory Disclaimer
+## 8. Accessibility & Universal Usability (WCAG 2.1 AA)
+
+SkillPath AI is engineered to be fully usable across diverse environments, assistive screen readers, and keyboard-only navigation:
+
+1. **Bypass Blocks (`SkipLink.jsx`):** A visible-on-focus skip link allows keyboard users to bypass sidebars and jump directly to the primary page (`#main-content`) complying with WCAG 2.4.1.
+2. **Semantic ARIA Data Tables:** The Skill Gap Benchmark table is marked up with semantic ARIA roles (`role="table"`, `role="row"`, `role="columnheader"`, `role="cell"`), enabling screen reader users to navigate row-by-row and expand diagnostic reasoning via keyboard (`Enter` / `Space`).
+3. **Modal Dialog Management:** `StudyGuideModal` and `ExerciseGuideModal` feature `role="dialog"`, `aria-modal="true"`, explicit `aria-labelledby` headers, and global `Escape` key listeners that instantly close the active dialogue.
+4. **Accessible Form Controls:** Form inputs in the Assessment Wizard feature explicit `label htmlFor` bindings, `aria-label` tags on buttons, and clear validation error alerts.
+5. **Color Independence & High Contrast:** Competency levels (Basic, Intermediate, Advanced) and statuses (Strong, Needs Improvement, Missing) use distinct typographic weight and icon badges rather than relying purely on color.
+
+---
+
+## 9. Responsible AI & Advisory Disclaimer
 
 Skill levels entered by users are self-reported estimates. SkillPath AI provides actionable guidance and roadmaps based on modern technical benchmarks, but does not guarantee employment, job placement, or certified competence. Disclaimers are prominently displayed throughout the application.
 
 ---
 
-## 8. License
+## 10. License
 
 MIT License. Built for the PromptWar Hackathon.

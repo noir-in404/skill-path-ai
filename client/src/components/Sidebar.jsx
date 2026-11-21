@@ -114,7 +114,7 @@ export const Sidebar = ({ mobileOpen, setMobileOpen }) => {
         )}
 
         {/* Navigation Links */}
-        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <nav aria-label="Main navigation" className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -122,6 +122,7 @@ export const Sidebar = ({ mobileOpen, setMobileOpen }) => {
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id, item.disabled)}
+                aria-current={isActive ? 'page' : undefined}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors text-left ${
                   isActive
                     ? 'bg-white text-brand-700 shadow-subtle font-semibold border border-charcoal-border/50'

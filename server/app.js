@@ -54,14 +54,9 @@ app.get('*', (req, res, next) => {
   });
 });
 
+import { errorHandler } from './middleware/errorHandler.js';
+
 // Global error handler
-app.use((err, req, res, next) => {
-  console.error('Unhandled server error:', err);
-  res.status(500).json({
-    success: false,
-    error: 'SERVER_ERROR',
-    message: err.message || 'An unexpected server error occurred.'
-  });
-});
+app.use(errorHandler);
 
 export default app;

@@ -13,6 +13,19 @@ import {
 } from 'lucide-react';
 
 export const StudyGuideModal = ({ isOpen, onClose, task }) => {
+  // Close modal on Escape key press (WCAG 2.1 AA)
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !task) return null;
 
   // Generate authoritative documentation link and title based on task.skill
@@ -159,7 +172,12 @@ export const StudyGuideModal = ({ isOpen, onClose, task }) => {
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-charcoal/60 backdrop-blur-sm animate-fade-in overflow-y-auto">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="study-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-charcoal/60 backdrop-blur-sm animate-fade-in overflow-y-auto"
+    >
       <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] shadow-elevated border border-charcoal-border flex flex-col overflow-hidden my-auto">
         
         {/* Header */}
@@ -179,7 +197,7 @@ export const StudyGuideModal = ({ isOpen, onClose, task }) => {
               </span>
             </div>
 
-            <h2 className="text-lg sm:text-xl font-extrabold text-charcoal-heading tracking-tight">
+            <h2 id="study-modal-title" className="text-lg sm:text-xl font-extrabold text-charcoal-heading tracking-tight">
               {task.title}
             </h2>
 
@@ -190,6 +208,7 @@ export const StudyGuideModal = ({ isOpen, onClose, task }) => {
 
           <button
             onClick={onClose}
+            aria-label="Close study guide modal"
             className="p-2 rounded-xl text-charcoal-muted hover:text-charcoal hover:bg-black/5 transition-colors shrink-0"
           >
             <X className="w-5 h-5" />

@@ -2,27 +2,32 @@ import { geminiService } from '../services/geminiService.js';
 import { getSampleAnalysis } from '../services/sampleDataService.js';
 
 /**
- * Controller for Career Assessment & AI Analysis
+ * @typedef {Object} SkillAssessmentPayload
+ * @property {string} careerGoal - Desired industry career role
+ * @property {Array<{ skill: string, level: string }>} [currentSkills] - Self-reported competencies
+ * @property {number} [dailyStudyHours] - Available daily study time (hours)
+ * @property {number} [learningDurationWeeks] - Target learning duration (weeks)
+ * @property {string} [learningStyle] - Preferred learning format
+ * @property {boolean} [useDemo] - Whether to force curated demo mode
  */
-export const analyzeAssessment = async (req, res) => {
-  try {
-    const { careerGoal, currentSkills, useDemo = false } = req.body;
 
-    // Validate required fields
-    if (!careerGoal || typeof careerGoal !== 'string' || !careerGoal.trim()) {
-      return res.status(400).json({
-        success: false,
-        error: 'VALIDATION_ERROR',
-        message: 'A target career role is required.'
-      });
-    }
+/**
+ * Evaluates candidate self-reported skills against live industry requirements using Gemini AI.
+ * Falls back to curated demo results when requested or when GEMINI_API_KEY is not yet set.
+ * 
+ * @param {import('express').Request<{}, {}, SkillAssessmentPayload>} req - Express request
+ * @param {import('express').Response} res - Express response
+ * @param {import('express').NextFunction} next - Express next handler
+ */
+export const analyzeAssessment = async (req, res, next) => {
+  try {
+    const { careerGoal, useDemo = false } = req.body;
 
     // Check if user requested Demo Mode or if Gemini API Key is missing
     const hasKey = geminiService.isConfigured();
 
     if (useDemo || !hasKey) {
       if (!hasKey && !useDemo) {
-        // Return clear warning that key is missing, while offering demo mode
         return res.status(400).json({
           success: false,
           error: 'MISSING_API_KEY',
@@ -31,7 +36,6 @@ export const analyzeAssessment = async (req, res) => {
         });
       }
 
-      // Serve curated sample data clearly marked as demo
       console.log(`[AssessmentController] Serving sample data for ${careerGoal} (Demo Mode)`);
       const sampleResult = getSampleAnalysis(req.body);
       return res.json({
@@ -52,30 +56,20 @@ export const analyzeAssessment = async (req, res) => {
     });
   } catch (error) {
     console.error('[AssessmentController] Error in analyzeAssessment:', error.message);
-
-    return res.status(500).json({
-      success: false,
-      error: error.code || 'AI_GENERATION_FAILED',
-      message: error.message || 'An unexpected error occurred while analyzing career readiness.'
-    });
+    next(error);
   }
 };
 
 /**
- * Dedicated roadmap generation endpoint
+ * Generates an actionable phased learning roadmap and recommended portfolio projects.
+ * 
+ * @param {import('express').Request<{}, {}, SkillAssessmentPayload>} req - Express request
+ * @param {import('express').Response} res - Express response
+ * @param {import('express').NextFunction} next - Express next handler
  */
-export const generateRoadmap = async (req, res) => {
+export const generateRoadmap = async (req, res, next) => {
   try {
     const { careerGoal, useDemo = false } = req.body;
-
-    if (!careerGoal) {
-      return res.status(400).json({
-        success: false,
-        error: 'VALIDATION_ERROR',
-        message: 'A target career role is required.'
-      });
-    }
-
     const hasKey = geminiService.isConfigured();
 
     if (useDemo || !hasKey) {
@@ -103,16 +97,15 @@ export const generateRoadmap = async (req, res) => {
     });
   } catch (error) {
     console.error('[AssessmentController] Error in generateRoadmap:', error.message);
-    return res.status(500).json({
-      success: false,
-      error: error.code || 'ROADMAP_GENERATION_FAILED',
-      message: error.message || 'Failed to generate learning roadmap.'
-    });
+    next(error);
   }
 };
 
 /**
- * System Health & Configuration Status Check
+ * Provides service health, API model status, and capability metadata.
+ * 
+ * @param {import('express').Request} req - Express request
+ * @param {import('express').Response} res - Express response
  */
 export const checkHealth = (req, res) => {
   const hasKey = geminiService.isConfigured();
@@ -120,6 +113,7 @@ export const checkHealth = (req, res) => {
     status: 'ok',
     product: 'SkillPath AI',
     tagline: 'From Career Ambition to Practical Skill Development',
+    version: '1.0.0',
     hasGeminiKey: hasKey,
     model: geminiService.getModelName(),
     timestamp: new Date().toISOString()
