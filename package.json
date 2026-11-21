@@ -10,6 +10,10 @@
     "server:dev": "npm --prefix server run dev",
     "client": "npm --prefix client run dev",
     "client:build": "npm --prefix client run build",
+    "test": "npm --prefix server test && npm --prefix client test",
+    "test:server": "npm --prefix server test",
+    "test:client": "npm --prefix client test",
+    "test:coverage": "npm --prefix server run test:coverage && npm --prefix client run test",
     "install:all": "npm --prefix server install && npm --prefix client install --include=dev"
   },
   "keywords": [

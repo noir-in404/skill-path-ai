@@ -4,6 +4,7 @@ import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { Toast } from './components/Toast';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 import { DashboardPage } from './pages/DashboardPage';
 import { AssessmentPage } from './pages/AssessmentPage';
@@ -66,8 +67,10 @@ const AppContent = () => {
 
 export default function App() {
   return (
-    <AssessmentProvider>
-      <AppContent />
-    </AssessmentProvider>
+    <ErrorBoundary>
+      <AssessmentProvider>
+        <AppContent />
+      </AssessmentProvider>
+    </ErrorBoundary>
   );
 }

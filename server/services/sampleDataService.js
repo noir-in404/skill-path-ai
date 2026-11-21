@@ -115,6 +115,23 @@ export const getSampleAnalysis = (assessment) => {
               estimatedHours: 8,
               practicalTask: "Write a SQL query that ranks monthly customer cohort retention without self-joins.",
               completionCriteria: "All 15 query solutions execute within optimal runtime limits.",
+              stepByStepGuide: [
+                "Step 1: Set up a PostgreSQL or SQLite database with a sample transactions table.",
+                "Step 2: Practice basic partition syntax using ROW_NUMBER(), RANK(), and DENSE_RANK() OVER (PARTITION BY ... ORDER BY ...).",
+                "Step 3: Implement time-lag comparisons using LAG() and LEAD() to measure consecutive purchase intervals.",
+                "Step 4: Compute cumulative metrics using SUM(amount) OVER (ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW).",
+                "Step 5: Benchmark query performance with EXPLAIN ANALYZE and compare window functions against traditional self-joins."
+              ],
+              whatToDo: [
+                "Always specify explicit ORDER BY clauses inside OVER() when computing running ranks or cumulative sums.",
+                "Verify whether ties should receive identical ranks (RANK vs DENSE_RANK) based on business logic.",
+                "Use CTEs to structure complex window calculations into readable logical stages."
+              ],
+              whatNotToDo: [
+                "DO NOT use correlated subqueries when a window function can resolve the calculation in a single pass.",
+                "DO NOT confuse PARTITION BY with GROUP BY — PARTITION BY does not collapse rows into a single record.",
+                "DO NOT omit indexes on foreign keys and timestamp columns used inside PARTITION BY."
+              ],
               completed: false
             },
             {
@@ -127,6 +144,23 @@ export const getSampleAnalysis = (assessment) => {
               estimatedHours: 6,
               practicalTask: "Design an e-commerce analytical schema with fact and dimension tables.",
               completionCriteria: "Entity relationship diagram passes 3NF and analytical query efficiency checks.",
+              stepByStepGuide: [
+                "Step 1: Identify all core entities in an e-commerce workflow (users, orders, products, shipments).",
+                "Step 2: Eliminate repeating groups to achieve First Normal Form (1NF).",
+                "Step 3: Remove partial functional dependencies for 2NF and transitive dependencies for 3NF.",
+                "Step 4: Design a dimensional star schema with a central fact_orders table and surrounding dimension tables (dim_users, dim_products, dim_dates).",
+                "Step 5: Create SQL DDL migration files with appropriate PRIMARY KEY and FOREIGN KEY constraints."
+              ],
+              whatToDo: [
+                "Denormalize carefully into star schemas specifically for read-heavy reporting and analytics warehouses.",
+                "Use surrogate integer keys for dimensions instead of mutable natural business keys.",
+                "Document entity relationships with clear ER diagrams before writing DDL statements."
+              ],
+              whatNotToDo: [
+                "DO NOT store comma-separated lists of values in a single database column.",
+                "DO NOT skip foreign key indexing on massive analytical transactional tables.",
+                "DO NOT over-normalize dimensional reporting schemas into deep snowflake hierarchies unless required for storage."
+              ],
               completed: false
             }
           ]
@@ -152,6 +186,23 @@ export const getSampleAnalysis = (assessment) => {
               estimatedHours: 10,
               practicalTask: "Write a Python script that flags outliers and normalizes address strings.",
               completionCriteria: "Zero unhandled NaN errors when running on test batch files.",
+              stepByStepGuide: [
+                "Step 1: Ingest raw CSV data into a Pandas DataFrame using pd.read_csv with strict dtype specifications.",
+                "Step 2: Inspect missing data patterns using df.isnull().sum() and visualize missingness with missingno.",
+                "Step 3: Handle null values using context-appropriate imputation (median for skewed numbers, explicit 'Unknown' for categories).",
+                "Step 4: Standardize dates and strings using pd.to_datetime and string accessor methods (.str.strip().str.lower()).",
+                "Step 5: Write unit assertions using pd.testing.assert_frame_equal to verify repeatable transformation results."
+              ],
+              whatToDo: [
+                "Encapsulate cleaning steps into functional pipeline methods using df.pipe().",
+                "Log all data transformation dropped rows and imputed values for analytical auditing.",
+                "Preserve raw source data by always creating a new transformed copy of the DataFrame."
+              ],
+              whatNotToDo: [
+                "DO NOT use inplace=True as it can introduce hidden mutation bugs in Pandas.",
+                "DO NOT drop entire rows automatically without understanding why data was missing.",
+                "DO NOT chain index assignments like df['a'][1] = val (causes SettingWithCopyWarning)."
+              ],
               completed: false
             },
             {
@@ -164,6 +215,23 @@ export const getSampleAnalysis = (assessment) => {
               estimatedHours: 8,
               practicalTask: "Generate correlation heatmaps and boxplots for user churn factors.",
               completionCriteria: "Deliver a Jupyter notebook with documented insights and business takeaways.",
+              stepByStepGuide: [
+                "Step 1: Calculate summary statistics (mean, median, IQR, skewness) across numerical columns.",
+                "Step 2: Plot distributions using Seaborn histplot with KDE overlays to check for normality.",
+                "Step 3: Construct a Pearson / Spearman correlation matrix and visualize it with sns.heatmap.",
+                "Step 4: Create categorical breakdown boxplots and violin plots to identify segment variations.",
+                "Step 5: Summarize 3 core data anomalies or counter-intuitive correlations in Markdown narrative cells."
+              ],
+              whatToDo: [
+                "Clearly label all visual axes, provide units, and choose colorblind-accessible palettes.",
+                "Accompany every chart with 1-2 bullet points of business interpretation.",
+                "Investigate extreme outliers before deciding whether to trim or keep them."
+              ],
+              whatNotToDo: [
+                "DO NOT use 3D pie charts or misleading truncated axes that distort percentage differences.",
+                "DO NOT present raw correlation numbers without checking for non-linear relationships.",
+                "DO NOT produce silent charts without titles, legends, or explanatory context."
+              ],
               completed: false
             }
           ]
@@ -189,6 +257,23 @@ export const getSampleAnalysis = (assessment) => {
               estimatedHours: 12,
               practicalTask: "Create a SaaS revenue and cohort churn tracker dashboard.",
               completionCriteria: "Dashboard updates in under 2 seconds and includes clear metric definitions.",
+              stepByStepGuide: [
+                "Step 1: Connect Tableau / PowerBI to the normalized analytical star schema database.",
+                "Step 2: Define calculated measures for Monthly Recurring Revenue (MRR), Customer Acquisition Cost (CAC), and LTV.",
+                "Step 3: Lay out high-level KPI summary cards across the top header row for quick executive scanning.",
+                "Step 4: Build interactive trend charts with date granularity parameters (Day, Week, Month).",
+                "Step 5: Configure drill-through actions enabling viewers to click a churned cohort and inspect constituent account rows."
+              ],
+              whatToDo: [
+                "Keep dashboard visual hierarchies simple: high-level metrics at top, detailed trends below.",
+                "Provide tooltips that define the exact business formula behind each metric.",
+                "Optimize workbook performance by filtering at the data source level before visual rendering."
+              ],
+              whatNotToDo: [
+                "DO NOT clutter a single dashboard screen with more than 5-6 core charts.",
+                "DO NOT use ambiguous color codings (stick to consistent semantic colors: green = growth, red = risk).",
+                "DO NOT publish dashboards without testing date filter edge cases across leap years and month ends."
+              ],
               completed: false
             }
           ]
@@ -208,6 +293,23 @@ export const getSampleAnalysis = (assessment) => {
             "Interactive dashboard tracking monthly recurring revenue (MRR) and cohort decay"
           ],
           careerRelevance: "Directly mirrors the daily analytics workflows at modern subscription and technology firms.",
+          stepByStepGuide: [
+            "Phase 1: Metric Definitions - Formalize churn formulas (subscriber churn vs revenue churn) and cohort boundaries.",
+            "Phase 2: SQL Cohort Extraction - Write SQL queries with LAG and DATE_TRUNC to calculate month-over-month retention rates.",
+            "Phase 3: Python Feature Analysis - Build a Jupyter notebook examining correlation between product usage frequency and cancellation.",
+            "Phase 4: Dashboard Visualization - Create an interactive Tableau/PowerBI dashboard displaying cohort heatmap retention triangles.",
+            "Phase 5: Executive Delivery - Write a 2-page executive summary outlining 3 strategic actions to curb user churn."
+          ],
+          whatToDo: [
+            "Differentiate between voluntary churn (cancellations) and involuntary churn (expired credit cards).",
+            "Use cohort-based retention curves instead of blended average churn rates.",
+            "Make all data extraction SQL queries reproducible and version-controlled."
+          ],
+          whatNotToDo: [
+            "DO NOT calculate churn rate simply as cancels divided by total active users without aligning timeframes.",
+            "DO NOT present raw statistical data without explaining the financial revenue implications.",
+            "DO NOT hardcode database credentials inside public project notebooks."
+          ],
           completed: false,
           status: "Not Started"
         },
@@ -224,6 +326,23 @@ export const getSampleAnalysis = (assessment) => {
             "Executive slide deck highlighting top 5 cross-selling bundles"
           ],
           careerRelevance: "Demonstrates practical revenue-driving analytical capability beyond simple descriptive metrics.",
+          stepByStepGuide: [
+            "Phase 1: Transactional Extraction - Query point-of-sale order line items and aggregate into basket transaction lists.",
+            "Phase 2: Data Preprocessing - One-hot encode basket contents into sparse Boolean matrices using mlxtend.",
+            "Phase 3: Association Mining - Run FP-Growth algorithm to identify item pairs with Support >= 0.02 and Confidence >= 0.5.",
+            "Phase 4: Lift Evaluation - Filter and rank association rules by Lift (> 1.2) to discover genuine cross-sell affinities.",
+            "Phase 5: Commercial Recommendations - Translate findings into bundle packaging and checkout upsell suggestions."
+          ],
+          whatToDo: [
+            "Set appropriate minimum support thresholds to prevent memory exhaustion on large transaction catalogues.",
+            "Focus on Lift rather than Confidence alone to avoid falsely recommending universally popular items.",
+            "Present product recommendations in clear business terms with expected average order value (AOV) uplifts."
+          ],
+          whatNotToDo: [
+            "DO NOT recommend items that customers already routinely buy together by default (e.g., iPhone + Charger) without incremental value.",
+            "DO NOT run association mining on raw uncleaned data with seasonal promotional noise.",
+            "DO NOT neglect computational efficiency when scaling beyond 100,000 distinct SKUs."
+          ],
           completed: false,
           status: "Not Started"
         }
@@ -486,6 +605,23 @@ export const getSampleAnalysis = (assessment) => {
             estimatedHours: 10,
             practicalTask: "Write TypeScript interfaces for a product catalogue with cart actions and dispatch types.",
             completionCriteria: "Zero 'any' types used; compiler passes with no warnings.",
+            stepByStepGuide: [
+              "Step 1: Install TypeScript and typings: npm install -D typescript @types/react @types/react-dom.",
+              "Step 2: Create a tsconfig.json file with strict: true, noImplicitAny: true, and jsx: 'react-jsx'.",
+              "Step 3: Define discriminated unions for async state: type RequestState<T> = { status: 'idle' } | { status: 'loading' } | { status: 'success'; data: T } | { status: 'error'; error: string }.",
+              "Step 4: Type component props with explicit interfaces or type aliases rather than generic object shapes.",
+              "Step 5: Run npx tsc --noEmit to verify zero compiler type errors."
+            ],
+            whatToDo: [
+              "Always enable strict null checks to eliminate 'cannot read properties of undefined' runtime crashes.",
+              "Prefer discriminated unions with a common literal discriminator tag (e.g. status) for type-safe state handling.",
+              "Type generic API responses using parameterized interfaces (ApiResponse<T>)."
+            ],
+            whatNotToDo: [
+              "DO NOT use the any escape hatch to bypass difficult type checking.",
+              "DO NOT use non-null assertion operator (!) unless you can mathematically prove the value cannot be null.",
+              "DO NOT duplicate types that can be inferred with typeof or ReturnType<T>."
+            ],
             completed: false
           },
           {
@@ -498,6 +634,23 @@ export const getSampleAnalysis = (assessment) => {
             estimatedHours: 6,
             practicalTask: "Split vendor bundles and run an automated performance audit on production build.",
             completionCriteria: "Achieve sub-1.5s Largest Contentful Paint (LCP) and zero layout shifts.",
+            stepByStepGuide: [
+              "Step 1: Run npm run build and inspect bundle size distribution using vite-plugin-visualizer or source-map-explorer.",
+              "Step 2: Implement route-level code splitting using React.lazy and <Suspense fallback={<LoadingSpinner />}>.",
+              "Step 3: Wrap expensive calculated values in useMemo and isolate component re-renders using React.memo.",
+              "Step 4: Convert legacy PNG/JPEG assets to WebP/AVIF format and add explicit width/height to eliminate layout shifts (CLS).",
+              "Step 5: Run Chrome Lighthouse audit in an Incognito window and ensure Performance, Accessibility, and Best Practices score 95+."
+            ],
+            whatToDo: [
+              "Profile before optimizing: use React Profiler to pinpoint actual rendering bottlenecks.",
+              "Ensure lazy-loaded chunks have smooth skeleton fallbacks so users don't see jarring blank flashes.",
+              "Set explicit cache-control headers on static JS and CSS bundles in production."
+            ],
+            whatNotToDo: [
+              "DO NOT wrap every single primitive component in React.memo prematurely without profiling.",
+              "DO NOT load oversized 4K images when a 200px responsive thumbnail is required.",
+              "DO NOT ignore layout shifts (CLS) caused by dynamically injected web fonts or banners."
+            ],
             completed: false
           }
         ]
